@@ -10,9 +10,20 @@ import java.util.regex.Pattern;
 public class ACO_TSP {
 
     private int iterNum;
+    int ants;
+    double alpha;
+    double belta;
+    double rou;
+    int[][] tsp_distance;
 
-    public ACO_TSP(int iterNum){
-        this.iterNum;
+    public ACO_TSP(int iterNum, int ants){
+        this.iterNum = iterNum;
+        this.ants = ants;
+        this.alpha = 1;
+        this.belta = 2;
+        this.rou = 0.5;
+
+
     }
 
     public void initTSP(){
@@ -43,30 +54,74 @@ public class ACO_TSP {
             }
         }
 
-        int[][] tsp_distance = new int[tsp_info.length][tsp_info.length];
+        this.tsp_distance = new int[tsp_info.length][tsp_info.length];
         for(int i=0;i<tsp_info.length;i++){
             for(int j=0;j<tsp_info.length;j++){
-                tsp_distance[i][j] = (int)distanceCal(tsp_info[i],tsp_info[j]);
+                this.tsp_distance[i][j] = (int)distanceCal(tsp_info[i],tsp_info[j]);
             }
         }
 
-        System.out.println(tsp_distance);
-
     }
 
 
-    public void doIter(){
+    public void doAntIter(){
+        for (int i=0;i<this.iterNum;i++){
+            for (int j=0;j<this.ants;j++){
+
+
+            }
+        }
 
 
     }
 
-    public void updatePhero(){
-
+    public void updatePhero(double[][] infoPenne, int[][] allMemPath, int[] distanceRoundAnts) {
+        for (int k = 0; k < this.ants; k++) {
+            for (int i = 0; i < allMemPath.length; i++) {
+                infoPenne[allMemPath[k][i]][allMemPath[k][i + 1]] = ((1 - this.rou) * infoPenne[allMemPath[k][i]][allMemPath[k][i + 1]] + distanceRoundAnts[k]);
+            }
+        }
     }
 
-    public void greedyPath(){
+    public double[][] initPenre(){
+        int[] initP = greedyPath();
+        for(int i=0; i<initP.length-1;i++){
+            
+        }
+    }
 
+    public int[] greedyPath(){
+        int[] greedyp = new int[this.tsp_distance.length + 1];
+        int tmp_min= 9999999;
+        int st=0;
+        int en=0;
+        for (int i=0;i<this.tsp_distance.length;i++){
+            for(int j=0;j<this.tsp_distance.length;j++){
+                if((tmp_min) >= tsp_distance[i][j]){
+                    st = i;
+                    en = j;
+                    tmp_min = this.tsp_distance[i][j];
+                }
+            }
+        }
+        greedyp[0] = st;
+        greedyp[1] = en;
+        st = en;
+        int lo = 2;
+        while (lo<greedyp.length - 1){
+            tmp_min = 9999999;
+            for(int k=0;k<this.tsp_distance.length;k++){
+                if(tmp_min > this.tsp_distance[st][k]){
+                    en = k;
+                }
+            }
+            greedyp[lo] = en;
+            st = en;
+            lo++;
+        }
+        greedyp[greedyp.length-1] = greedyp[0];
 
+        return greedyp;
     }
 
     public double distanceCal(int[] p1, int[] p2){
@@ -77,7 +132,7 @@ public class ACO_TSP {
     }
 
     public static void main(String[] args) {
-        ACO_TSP demo = new ACO_TSP();
+        ACO_TSP demo = new ACO_TSP(32,32);
         demo.initTSP();
     }
 
