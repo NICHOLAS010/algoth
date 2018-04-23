@@ -1,5 +1,7 @@
 package rouletteWheel;
 
+import java.util.Random;
+
 public class RouletteWheel {
     double[] P;
     public RouletteWheel(double[] P){
@@ -13,7 +15,7 @@ public class RouletteWheel {
      */
     public int doRouletteWheel(){
         double[]sortedP = this.sorted();
-        double rand = Math.random();
+        double rand = new Random().nextDouble();
         System.out.println(rand);
         double tp=0;
         int result = 99999;
@@ -49,6 +51,7 @@ public class RouletteWheel {
             }
             sw = tmp[i];
             tmp[i] = min;
+            System.out.println(fg + "**************");
             tmp[fg] = sw;
             tmp2[i] = min; // i是排序后的下标，fg是实际未排序顺序的下标
             tmp3[i] = fg;
