@@ -46,17 +46,17 @@ public class Ant {
     public void getNextNode(int nodeNum){ //选择出下一个节点
         int currentPoint = this.pastNodes.get(this.pastNodes.size()-1);
         double sum = 0;
-        double[] temp = new double[this.pastNodes.size()];
+        double[] temp = new double[this.nextNodes.size()];
         for(int i=0; i<this.nextNodes.size();i++){
             temp[i] = Math.pow(this.infoPenne[currentPoint][this.nextNodes.get(i)], this.alpha) + Math.pow(this.TSP[currentPoint][this.nextNodes.get(i)],(-1) * this.belta);
             sum = sum + temp[i];
         }
-        double[] temp2 = new double[this.pastNodes.size()];
+        double[] temp2 = new double[this.nextNodes.size()];
         for(int j=0;j<this.nextNodes.size();j++){
             temp2[j] = temp[j] / sum;
         }
         int choose = this.nextNodes.get(new RouletteWheel(temp2).doRouletteWheel());
-        this.pastNodes.add(this.nextNodes.get(choose));
+        this.pastNodes.add(choose);
         this.nextNodes.remove(choose);
         this.memPath[nodeNum] = choose;
     }
@@ -69,6 +69,19 @@ public class Ant {
             nodeNum ++;
         }
         this.memPath[this.memPath.length-1] = memPath[0];
+    }
+
+    public int[] getMemPath(){
+        return this.memPath;
+    }
+
+    public int getRoundDistance(){
+        int oneRoundLenfth=0;
+        for(int i=0;i<this.memPath.length-1;i++){
+            oneRoundLenfth = (int) DistanceCal.distanceCal(this.TSP[memPath[i]],this.TSP[memPath[i+1]]);
+        }
+        assert oneRoundLenfth > 0;
+        return oneRoundLenfth;
     }
 
     public static void main(String[] args) {
